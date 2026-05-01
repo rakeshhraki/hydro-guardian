@@ -40,13 +40,15 @@ function AuthPage() {
   };
 
   return (
-    <div className="min-h-[calc(100vh-4rem)] grid place-items-center px-4 py-8 bg-gradient-to-br from-[#0a1628] via-[#0c2340] to-[#0a1f3a] relative overflow-hidden">
-      {/* deco */}
-      <div className="absolute inset-0 opacity-30 pointer-events-none">
+    <div className="min-h-[calc(100vh-4rem)] grid place-items-center px-4 py-8 relative overflow-hidden">
+      <OceanBackground />
+
+      {/* expanding rings overlay */}
+      <div className="absolute inset-0 opacity-20 pointer-events-none">
         {[0, 1, 2].map(i => (
           <motion.div
             key={i}
-            className="absolute rounded-full border border-aqua/20"
+            className="absolute rounded-full border border-aqua/30"
             style={{ left: "50%", top: "50%", x: "-50%", y: "-50%" }}
             initial={{ width: 100, height: 100, opacity: 0.4 }}
             animate={{ width: 700, height: 700, opacity: 0 }}
