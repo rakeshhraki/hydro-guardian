@@ -60,7 +60,7 @@ function AuthPage() {
       <motion.div
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        className="relative w-full max-w-md panel p-6 sm:p-8"
+        className="relative z-10 w-full max-w-md panel p-6 sm:p-8 backdrop-blur-xl bg-background/40"
       >
         <div className="flex flex-col items-center text-center mb-6">
           <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-primary to-accent grid place-items-center glow-aqua mb-3">
