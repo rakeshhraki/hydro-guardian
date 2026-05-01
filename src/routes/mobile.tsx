@@ -1,5 +1,5 @@
-import { createFileRoute, Link, Outlet, useRouterState } from "@tanstack/react-router";
-import { Activity, Bell, History, Map as MapIcon, Sliders, LogIn } from "lucide-react";
+import { createFileRoute } from "@tanstack/react-router";
+import { Activity, Bell, History, Map as MapIcon, Sliders } from "lucide-react";
 import { useHydroStore } from "@/lib/store";
 
 export const Route = createFileRoute("/mobile")({
