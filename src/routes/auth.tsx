@@ -3,7 +3,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Droplets, Mail, Lock, User as UserIcon, ArrowRight, Eye, EyeOff } from "lucide-react";
 import { useAuth } from "@/lib/authStore";
-import { OceanBackground } from "@/components/OceanBackground";
+
 import { toast } from "sonner";
 
 type Search = { mode?: "login" | "signup" };
@@ -41,7 +41,7 @@ function AuthPage() {
 
   return (
     <div className="min-h-[calc(100vh-4rem)] grid place-items-center px-4 py-8 relative overflow-hidden">
-      <OceanBackground />
+      
 
       {/* expanding rings overlay */}
       <div className="absolute inset-0 opacity-20 pointer-events-none">
