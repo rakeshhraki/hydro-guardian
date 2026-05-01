@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate, useSearch } from "@tanstack/react-router";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Droplets, Mail, Lock, User as UserIcon, ArrowRight } from "lucide-react";
+import { Droplets, Mail, Lock, User as UserIcon, ArrowRight, Eye, EyeOff } from "lucide-react";
 import { useAuth } from "@/lib/authStore";
 import { toast } from "sonner";
 
@@ -101,7 +101,7 @@ function AuthPage() {
           </AnimatePresence>
 
           <Field icon={<Mail className="h-4 w-4" />} type="email" placeholder="Email address" value={email} onChange={setEmail} />
-          <Field icon={<Lock className="h-4 w-4" />} type="password" placeholder="Password" value={password} onChange={setPassword} />
+          <PasswordField value={password} onChange={setPassword} />
 
           <button
             type="submit"
@@ -141,6 +141,31 @@ function Field({ icon, type = "text", placeholder, value, onChange }: {
         onChange={e => onChange(e.target.value)}
         className="flex-1 bg-transparent outline-none text-sm placeholder:text-muted-foreground"
       />
+    </label>
+  );
+}
+
+function PasswordField({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  const [show, setShow] = useState(false);
+  return (
+    <label className="flex items-center gap-2 h-11 px-3 rounded-lg bg-muted/40 border border-border focus-within:border-aqua/60 transition">
+      <span className="text-muted-foreground"><Lock className="h-4 w-4" /></span>
+      <input
+        type={show ? "text" : "password"}
+        required
+        placeholder="Password"
+        value={value}
+        onChange={e => onChange(e.target.value)}
+        className="flex-1 bg-transparent outline-none text-sm placeholder:text-muted-foreground"
+      />
+      <button
+        type="button"
+        onClick={() => setShow(s => !s)}
+        className="text-muted-foreground hover:text-aqua transition p-1 -mr-1"
+        aria-label={show ? "Hide password" : "Show password"}
+      >
+        {show ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+      </button>
     </label>
   );
 }
