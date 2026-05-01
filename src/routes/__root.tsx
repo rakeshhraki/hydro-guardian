@@ -4,6 +4,8 @@ import appCss from "../styles.css?url";
 import { AppHeader } from "@/components/AppHeader";
 import { NotificationStack } from "@/components/NotificationStack";
 import { SplashScreen } from "@/components/SplashScreen";
+import { LogoIntro } from "@/components/LogoIntro";
+import { AnimatedBackground } from "@/components/AnimatedBackground";
 import { useHydroEngine } from "@/lib/useHydroEngine";
 import { useAuth } from "@/lib/authStore";
 import { Toaster } from "@/components/ui/sonner";
@@ -48,7 +50,7 @@ function RootShell({ children }: { children: React.ReactNode }) {
 
 function RootComponent() {
   useHydroEngine();
-  const [showSplash, setShowSplash] = useState(true);
+  const [phase, setPhase] = useState<"intro" | "splash" | "ready">("intro");
   const hydrate = useAuth(s => s.hydrate);
   const hydrated = useAuth(s => s.hydrated);
   const user = useAuth(s => s.user);
@@ -57,24 +59,31 @@ function RootComponent() {
 
   useEffect(() => { hydrate(); }, [hydrate]);
   useEffect(() => {
-    const t = setTimeout(() => setShowSplash(false), 3000);
-    return () => clearTimeout(t);
+    const t1 = setTimeout(() => setPhase("splash"), 2200);
+    const t2 = setTimeout(() => setPhase("ready"), 2200 + 3000);
+    return () => { clearTimeout(t1); clearTimeout(t2); };
   }, []);
 
+  const booting = phase !== "ready";
+
   useEffect(() => {
-    if (showSplash || !hydrated) return;
+    if (booting || !hydrated) return;
     if (!user && path !== "/auth") navigate({ to: "/auth", search: { mode: "login" } });
-  }, [showSplash, hydrated, user, path, navigate]);
+  }, [booting, hydrated, user, path, navigate]);
 
   const isAuthRoute = path === "/auth";
-  const showShell = !showSplash && (user || isAuthRoute);
+  const showShell = !booting && (user || isAuthRoute);
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <AnimatePresence>{showSplash && <SplashScreen key="splash" />}</AnimatePresence>
+    <div className="min-h-screen flex flex-col relative">
+      {user && !isAuthRoute && showShell && <AnimatedBackground />}
+      <AnimatePresence>
+        {phase === "intro" && <LogoIntro key="intro" />}
+        {phase === "splash" && <SplashScreen key="splash" />}
+      </AnimatePresence>
       {showShell && !isAuthRoute && <AppHeader />}
       <main className="flex-1">
-        {showShell ? <Outlet /> : !showSplash && <div className="min-h-screen" />}
+        {showShell ? <Outlet /> : !booting && <div className="min-h-screen" />}
       </main>
       {user && <NotificationStack />}
       <Toaster theme="dark" position="top-right" richColors />
