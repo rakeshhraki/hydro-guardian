@@ -1,9 +1,13 @@
-import { Outlet, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
+import { Outlet, createRootRoute, HeadContent, Scripts, useRouterState, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import appCss from "../styles.css?url";
 import { AppHeader } from "@/components/AppHeader";
 import { NotificationStack } from "@/components/NotificationStack";
+import { SplashScreen } from "@/components/SplashScreen";
 import { useHydroEngine } from "@/lib/useHydroEngine";
+import { useAuth } from "@/lib/authStore";
 import { Toaster } from "@/components/ui/sonner";
+import { AnimatePresence } from "framer-motion";
 
 function NotFoundComponent() {
   return (
@@ -44,13 +48,35 @@ function RootShell({ children }: { children: React.ReactNode }) {
 
 function RootComponent() {
   useHydroEngine();
+  const [showSplash, setShowSplash] = useState(true);
+  const hydrate = useAuth(s => s.hydrate);
+  const hydrated = useAuth(s => s.hydrated);
+  const user = useAuth(s => s.user);
+  const path = useRouterState({ select: r => r.location.pathname });
+  const navigate = useNavigate();
+
+  useEffect(() => { hydrate(); }, [hydrate]);
+  useEffect(() => {
+    const t = setTimeout(() => setShowSplash(false), 3000);
+    return () => clearTimeout(t);
+  }, []);
+
+  useEffect(() => {
+    if (showSplash || !hydrated) return;
+    if (!user && path !== "/auth") navigate({ to: "/auth", search: { mode: "login" } });
+  }, [showSplash, hydrated, user, path, navigate]);
+
+  const isAuthRoute = path === "/auth";
+  const showShell = !showSplash && (user || isAuthRoute);
+
   return (
     <div className="min-h-screen flex flex-col">
-      <AppHeader />
+      <AnimatePresence>{showSplash && <SplashScreen key="splash" />}</AnimatePresence>
+      {showShell && !isAuthRoute && <AppHeader />}
       <main className="flex-1">
-        <Outlet />
+        {showShell ? <Outlet /> : !showSplash && <div className="min-h-screen" />}
       </main>
-      <NotificationStack />
+      {user && <NotificationStack />}
       <Toaster theme="dark" position="top-right" richColors />
     </div>
   );
