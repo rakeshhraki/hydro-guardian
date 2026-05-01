@@ -67,9 +67,8 @@ function RootComponent() {
 
   useEffect(() => { hydrate(); }, [hydrate]);
   useEffect(() => {
-    const t1 = setTimeout(() => setPhase("splash"), 2200);
-    const t2 = setTimeout(() => setPhase("ready"), 2200 + 3000);
-    return () => { clearTimeout(t1); clearTimeout(t2); };
+    const t = setTimeout(() => setPhase("ready"), 3000);
+    return () => clearTimeout(t);
   }, []);
 
   const booting = phase !== "ready";
