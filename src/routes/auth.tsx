@@ -101,7 +101,7 @@ function AuthPage() {
           </AnimatePresence>
 
           <Field icon={<Mail className="h-4 w-4" />} type="email" placeholder="Email address" value={email} onChange={setEmail} />
-          <Field icon={<Lock className="h-4 w-4" />} type="password" placeholder="Password" value={password} onChange={setPassword} />
+          <PasswordField value={password} onChange={setPassword} />
 
           <button
             type="submit"
