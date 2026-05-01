@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate, useSearch } from "@tanstack/react-router";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Droplets, Mail, Lock, User as UserIcon, ArrowRight } from "lucide-react";
+import { Droplets, Mail, Lock, User as UserIcon, ArrowRight, Eye, EyeOff } from "lucide-react";
 import { useAuth } from "@/lib/authStore";
 import { toast } from "sonner";
 
