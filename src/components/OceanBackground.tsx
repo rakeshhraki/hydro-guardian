@@ -4,24 +4,31 @@ import oceanImg from "@/assets/ocean-bg.jpeg";
 export function OceanBackground() {
   return (
     <div className="absolute inset-0 -z-0 overflow-hidden pointer-events-none">
-      {/* Realistic underwater photo base — slowly drifts for life */}
+      {/* Realistic underwater photo base — independent axes for seamless drift */}
       <motion.div
-        className="absolute -inset-[6%] bg-cover bg-center"
+        className="absolute -inset-[8%] bg-cover bg-center will-change-transform"
         style={{ backgroundImage: `url(${oceanImg})` }}
-        animate={{ scale: [1, 1.06, 1], x: [0, -10, 0], y: [0, 8, 0] }}
-        transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
-      />
+        animate={{ scale: [1, 1.05, 1] }}
+        transition={{ duration: 30, repeat: Infinity, repeatType: "mirror", ease: "easeInOut" }}
+      >
+        <motion.div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: `url(${oceanImg})` }}
+          animate={{ x: [-12, 12] }}
+          transition={{ duration: 28, repeat: Infinity, repeatType: "mirror", ease: "easeInOut" }}
+        />
+      </motion.div>
 
-      {/* Caustic shimmer — soft moving light overlay on the surface */}
+      {/* Caustic shimmer — long, mirrored, no snap */}
       <motion.div
-        className="absolute inset-0 mix-blend-screen opacity-40"
+        className="absolute inset-0 mix-blend-screen will-change-transform"
         style={{
           background:
             "radial-gradient(ellipse 60% 30% at 50% 0%, rgba(186,230,253,0.55), transparent 70%), radial-gradient(ellipse 40% 25% at 30% 5%, rgba(125,211,252,0.4), transparent 70%), radial-gradient(ellipse 35% 25% at 75% 8%, rgba(165,243,252,0.4), transparent 70%)",
-          filter: "blur(14px)",
+          filter: "blur(16px)",
         }}
-        animate={{ x: [0, 30, -20, 0], opacity: [0.3, 0.55, 0.3] }}
-        transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
+        animate={{ x: [-25, 25], opacity: [0.32, 0.5] }}
+        transition={{ duration: 14, repeat: Infinity, repeatType: "mirror", ease: "easeInOut" }}
       />
 
       {/* Light rays sweeping down */}
