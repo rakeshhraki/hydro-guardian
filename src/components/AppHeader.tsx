@@ -1,6 +1,7 @@
-import { Link, useRouterState } from "@tanstack/react-router";
-import { Activity, Droplets, Map as MapIcon, Bell, History, Sliders, Settings, Smartphone } from "lucide-react";
+import { Link, useRouterState, useNavigate } from "@tanstack/react-router";
+import { Activity, Droplets, Map as MapIcon, Bell, History, Sliders, Settings, Smartphone, LogOut } from "lucide-react";
 import { useHydroStore } from "@/lib/store";
+import { useAuth } from "@/lib/authStore";
 import { motion } from "framer-motion";
 
 const links = [
@@ -18,6 +19,9 @@ export function AppHeader() {
   const sim = useHydroStore(s => s.system.simulation);
   const source = useHydroStore(s => s.system.source);
   const notif = useHydroStore(s => s.notifications.length);
+  const user = useAuth(s => s.user);
+  const logout = useAuth(s => s.logout);
+  const navigate = useNavigate();
 
   return (
     <header className="sticky top-0 z-40 glass">
@@ -66,6 +70,15 @@ export function AppHeader() {
               <span className="absolute -top-1 -right-1 h-4 min-w-4 px-1 grid place-items-center rounded-full bg-[var(--leak)] text-[10px] font-bold text-white">{notif}</span>
             )}
           </Link>
+          {user && (
+            <button
+              onClick={() => { logout(); navigate({ to: "/auth", search: { mode: "login" } }); }}
+              title={`Sign out (${user.name})`}
+              className="h-9 w-9 grid place-items-center rounded-md glass hover:text-[var(--leak)] transition-colors"
+            >
+              <LogOut className="h-4 w-4" />
+            </button>
+          )}
         </div>
       </div>
 
