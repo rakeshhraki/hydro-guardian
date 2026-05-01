@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import logo from "@/assets/hydrosen-logo.jpeg";
+import logo from "@/assets/hydrosen-logo.png";
 
 export function LogoIntro() {
   return (
