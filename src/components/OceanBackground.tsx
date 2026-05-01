@@ -108,7 +108,7 @@ export function OceanBackground() {
             }}
             initial={{ y: 0, opacity: 0 }}
             animate={{
-              y: [0, -window?.innerHeight || -800],
+              y: ["0vh", "-110vh"],
               x: [0, 10, -10, 5, 0],
               opacity: [0, 0.9, 0.9, 0],
             }}
