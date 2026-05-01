@@ -41,7 +41,7 @@ function AuthPage() {
 
   return (
     <div className="min-h-[calc(100vh-4rem)] grid place-items-center px-4 py-8 relative overflow-hidden">
-      <OceanBackground />
+      
 
       {/* expanding rings overlay */}
       <div className="absolute inset-0 opacity-20 pointer-events-none">
