@@ -1,87 +1,140 @@
 import { motion } from "framer-motion";
-import oceanImg from "@/assets/ocean-bg.jpeg";
 
 export function OceanBackground() {
   return (
     <div className="absolute inset-0 -z-0 overflow-hidden pointer-events-none">
-      {/* Realistic underwater photo base — independent axes for seamless drift */}
-      <motion.div
-        className="absolute -inset-[8%] bg-cover bg-center will-change-transform"
-        style={{ backgroundImage: `url(${oceanImg})` }}
-        animate={{ scale: [1, 1.05, 1] }}
-        transition={{ duration: 30, repeat: Infinity, repeatType: "mirror", ease: "easeInOut" }}
-      >
-        <motion.div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url(${oceanImg})` }}
-          animate={{ x: [-12, 12] }}
-          transition={{ duration: 28, repeat: Infinity, repeatType: "mirror", ease: "easeInOut" }}
-        />
-      </motion.div>
-
-      {/* Caustic shimmer — long, mirrored, no snap */}
-      <motion.div
-        className="absolute inset-0 mix-blend-screen will-change-transform"
-        style={{
-          background:
-            "radial-gradient(ellipse 60% 30% at 50% 0%, rgba(186,230,253,0.55), transparent 70%), radial-gradient(ellipse 40% 25% at 30% 5%, rgba(125,211,252,0.4), transparent 70%), radial-gradient(ellipse 35% 25% at 75% 8%, rgba(165,243,252,0.4), transparent 70%)",
-          filter: "blur(16px)",
-        }}
-        animate={{ x: [-25, 25], opacity: [0.32, 0.5] }}
-        transition={{ duration: 14, repeat: Infinity, repeatType: "mirror", ease: "easeInOut" }}
-      />
-
-      {/* Light rays sweeping down */}
-      <motion.div
-        className="absolute inset-0 mix-blend-screen opacity-25"
-        style={{
-          background:
-            "linear-gradient(180deg, rgba(186,230,253,0.55) 0%, rgba(186,230,253,0.15) 35%, transparent 70%)",
-          maskImage:
-            "repeating-linear-gradient(100deg, transparent 0px, transparent 80px, black 90px, black 110px, transparent 130px, transparent 200px)",
-          WebkitMaskImage:
-            "repeating-linear-gradient(100deg, transparent 0px, transparent 80px, black 90px, black 110px, transparent 130px, transparent 200px)",
-        }}
-        animate={{ backgroundPositionX: ["0%", "100%"] }}
-        transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
-      />
-
-      {/* Rising bubbles */}
-      {Array.from({ length: 22 }).map((_, i) => {
-        const size = 3 + (i % 6) * 2.5;
-        const left = (i * 47) % 100;
-        const dur = 7 + (i % 7);
-        const delay = (i * 0.5) % 9;
-        return (
-          <motion.span
-            key={i}
-            className="absolute rounded-full"
-            style={{
-              left: `${left}%`,
-              bottom: "-30px",
-              width: size,
-              height: size,
-              background:
-                "radial-gradient(circle at 30% 30%, rgba(255,255,255,0.95), rgba(186,230,253,0.4) 60%, rgba(186,230,253,0.05) 100%)",
-              boxShadow: "inset 0 0 3px rgba(255,255,255,0.7), 0 0 4px rgba(186,230,253,0.4)",
-            }}
-            initial={{ y: 0, opacity: 0 }}
-            animate={{
-              y: ["0vh", "-115vh"],
-              x: [0, 12, -10, 6, 0],
-              opacity: [0, 0.95, 0.95, 0],
-            }}
-            transition={{ duration: dur, repeat: Infinity, delay, ease: "easeIn" }}
-          />
-        );
-      })}
-
-      {/* Depth vignette — pushes focus to the card */}
+      {/* deep ocean gradient base */}
       <div
         className="absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse at 50% 55%, transparent 30%, rgba(3,19,43,0.55) 80%, rgba(2,12,28,0.85) 100%)",
+            "linear-gradient(180deg, #03132b 0%, #062a4a 40%, #0a4d6e 75%, #0e6b8a 100%)",
+        }}
+      />
+
+      {/* god rays from surface */}
+      <div
+        className="absolute inset-0 opacity-40 mix-blend-screen"
+        style={{
+          background:
+            "radial-gradient(ellipse at 30% -10%, rgba(125,211,252,0.5), transparent 55%), radial-gradient(ellipse at 70% -10%, rgba(56,189,248,0.35), transparent 60%)",
+        }}
+      />
+
+      {/* moving caustic light */}
+      <motion.div
+        className="absolute -top-20 left-0 right-0 h-[60%] mix-blend-screen opacity-30"
+        style={{
+          background:
+            "radial-gradient(circle at 20% 20%, rgba(186,230,253,0.6), transparent 40%), radial-gradient(circle at 70% 30%, rgba(125,211,252,0.5), transparent 45%)",
+          filter: "blur(20px)",
+        }}
+        animate={{ x: [0, 40, -20, 0], y: [0, 20, -10, 0] }}
+        transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
+      />
+
+      {/* Animated waves (SVG) */}
+      <svg
+        className="absolute inset-x-0 top-1/3 w-full h-[55%]"
+        viewBox="0 0 1440 600"
+        preserveAspectRatio="none"
+      >
+        <defs>
+          <linearGradient id="wave1" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0%" stopColor="#38bdf8" stopOpacity="0.35" />
+            <stop offset="100%" stopColor="#0c4a6e" stopOpacity="0.0" />
+          </linearGradient>
+          <linearGradient id="wave2" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0%" stopColor="#7dd3fc" stopOpacity="0.25" />
+            <stop offset="100%" stopColor="#082f49" stopOpacity="0.0" />
+          </linearGradient>
+          <linearGradient id="wave3" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0%" stopColor="#a5f3fc" stopOpacity="0.2" />
+            <stop offset="100%" stopColor="#082f49" stopOpacity="0.0" />
+          </linearGradient>
+        </defs>
+
+        <motion.path
+          fill="url(#wave1)"
+          animate={{
+            d: [
+              "M0,160 C240,220 480,80 720,140 C960,200 1200,120 1440,170 L1440,600 L0,600 Z",
+              "M0,180 C240,120 480,210 720,160 C960,110 1200,200 1440,140 L1440,600 L0,600 Z",
+              "M0,160 C240,220 480,80 720,140 C960,200 1200,120 1440,170 L1440,600 L0,600 Z",
+            ],
+          }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.path
+          fill="url(#wave2)"
+          animate={{
+            d: [
+              "M0,240 C240,300 480,180 720,240 C960,300 1200,200 1440,260 L1440,600 L0,600 Z",
+              "M0,260 C240,200 480,300 720,240 C960,180 1200,290 1440,220 L1440,600 L0,600 Z",
+              "M0,240 C240,300 480,180 720,240 C960,300 1200,200 1440,260 L1440,600 L0,600 Z",
+            ],
+          }}
+          transition={{ duration: 13, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.path
+          fill="url(#wave3)"
+          animate={{
+            d: [
+              "M0,340 C240,400 480,280 720,340 C960,400 1200,300 1440,360 L1440,600 L0,600 Z",
+              "M0,360 C240,300 480,400 720,340 C960,280 1200,390 1440,320 L1440,600 L0,600 Z",
+              "M0,340 C240,400 480,280 720,340 C960,400 1200,300 1440,360 L1440,600 L0,600 Z",
+            ],
+          }}
+          transition={{ duration: 16, repeat: Infinity, ease: "easeInOut" }}
+        />
+      </svg>
+
+      {/* Rising bubbles */}
+      {Array.from({ length: 18 }).map((_, i) => {
+        const size = 4 + (i % 5) * 3;
+        const left = (i * 53) % 100;
+        const dur = 6 + (i % 6);
+        const delay = (i * 0.6) % 8;
+        return (
+          <motion.span
+            key={i}
+            className="absolute rounded-full bg-cyan-200/40 border border-cyan-100/30"
+            style={{
+              left: `${left}%`,
+              bottom: "-20px",
+              width: size,
+              height: size,
+              boxShadow: "inset 0 0 4px rgba(255,255,255,0.6)",
+            }}
+            initial={{ y: 0, opacity: 0 }}
+            animate={{
+              y: ["0vh", "-110vh"],
+              x: [0, 10, -10, 5, 0],
+              opacity: [0, 0.9, 0.9, 0],
+            }}
+            transition={{
+              duration: dur,
+              repeat: Infinity,
+              delay,
+              ease: "easeIn",
+            }}
+          />
+        );
+      })}
+
+      {/* Surface shimmer line */}
+      <motion.div
+        className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-cyan-200/60 to-transparent"
+        animate={{ opacity: [0.3, 0.8, 0.3] }}
+        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+      />
+
+      {/* Soft vignette */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(ellipse at center, transparent 40%, rgba(3,19,43,0.7) 100%)",
         }}
       />
     </div>

@@ -3,12 +3,7 @@ import logo from "@/assets/hydrosen-logo.png";
 
 export function LogoIntro() {
   return (
-    <motion.div
-      className="fixed inset-0 z-[110] grid place-items-center bg-[#06101f] overflow-hidden"
-      initial={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.4, ease: "easeOut" }}
-    >
+    <div className="fixed inset-0 z-[110] grid place-items-center bg-[#06101f] overflow-hidden">
       {/* radial blend backdrop */}
       <div
         className="absolute inset-0"
@@ -18,40 +13,60 @@ export function LogoIntro() {
         }}
       />
 
-      {/* expanding water rings — triggered on droplet impact */}
-      {[0, 1].map((i) => (
+      {/* expanding water rings */}
+      {[0, 1, 2].map((i) => (
         <motion.div
           key={i}
-          className="absolute rounded-full border border-aqua/30"
-          initial={{ width: 60, height: 60, opacity: 0 }}
-          animate={{ width: 700, height: 700, opacity: [0, 0.55, 0] }}
-          transition={{ duration: 1.6, delay: 0.8 + i * 0.4, ease: "easeOut" }}
+          className="absolute rounded-full border border-aqua/20"
+          initial={{ width: 80, height: 80, opacity: 0 }}
+          animate={{ width: 900, height: 900, opacity: [0, 0.5, 0] }}
+          transition={{ duration: 3, repeat: Infinity, delay: 1.2 + i * 0.7, ease: "easeOut" }}
         />
       ))}
 
-      {/* logo drop — fast, smooth, single motion */}
+      {/* falling water droplets in background */}
+      {Array.from({ length: 8 }).map((_, i) => (
+        <motion.span
+          key={`d-${i}`}
+          className="absolute h-1.5 w-1.5 rounded-full bg-aqua/60 blur-[1px]"
+          style={{ left: `${12 + i * 10}%` }}
+          initial={{ y: "-10vh", opacity: 0 }}
+          animate={{ y: "60vh", opacity: [0, 1, 0] }}
+          transition={{
+            duration: 2.4 + Math.random() * 1.2,
+            repeat: Infinity,
+            delay: Math.random() * 2,
+            ease: "easeIn",
+          }}
+        />
+      ))}
+
+      {/* logo drop sequence — single smooth motion, no conflicting children animations */}
       <motion.div
         className="relative"
-        initial={{ y: -260, opacity: 0, scale: 0.7 }}
+        initial={{ y: -300, opacity: 0, scale: 0.7 }}
         animate={{ y: 0, opacity: 1, scale: 1 }}
-        transition={{ duration: 0.8, ease: [0.34, 1.56, 0.64, 1] }}
+        transition={{
+          duration: 1.2,
+          ease: [0.34, 1.56, 0.64, 1], // gentle bounce, no jitter
+        }}
       >
         {/* splash ripple on impact */}
         <motion.div
-          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-aqua/50"
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-aqua/40"
           initial={{ width: 0, height: 0, opacity: 0 }}
-          animate={{ width: 320, height: 320, opacity: [0, 0.8, 0] }}
-          transition={{ duration: 0.9, delay: 0.75, ease: "easeOut" }}
+          animate={{ width: 360, height: 360, opacity: [0, 0.7, 0] }}
+          transition={{ duration: 1.1, delay: 1.1, ease: "easeOut" }}
         />
 
-        {/* aqua glow */}
+        {/* soft aqua glow that blends edges */}
         <div className="absolute inset-0 rounded-full bg-aqua/25 blur-3xl scale-110" />
 
-        {/* logo blended with screen */}
+        {/* logo blended with screen — gentle idle float starts AFTER drop completes */}
         <motion.img
           src={logo}
           alt="HydroSen"
-          className="relative h-56 w-56 sm:h-72 sm:w-72 object-contain"
+          className="relative h-64 w-64 sm:h-80 sm:w-80 object-contain"
           style={{
             mixBlendMode: "screen",
             WebkitMaskImage:
@@ -61,6 +76,13 @@ export function LogoIntro() {
             filter: "drop-shadow(0 0 40px rgba(56,189,248,0.55)) brightness(1.1) contrast(1.05)",
             willChange: "transform",
           }}
+          animate={{ y: [0, -5, 0] }}
+          transition={{
+            duration: 3,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 1.4,
+          }}
         />
       </motion.div>
 
@@ -69,12 +91,12 @@ export function LogoIntro() {
         className="absolute bottom-0 left-0 right-0 h-24 pointer-events-none"
         style={{
           background:
-            "linear-gradient(to top, rgba(56,189,248,0.3), transparent)",
+            "linear-gradient(to top, rgba(56,189,248,0.25), transparent)",
         }}
         initial={{ opacity: 0 }}
-        animate={{ opacity: 0.7 }}
-        transition={{ duration: 0.6, delay: 0.6 }}
+        animate={{ opacity: 0.6 }}
+        transition={{ duration: 1.2, delay: 0.8 }}
       />
-    </motion.div>
+    </div>
   );
 }
