@@ -25,11 +25,8 @@ export const useAuth = create<AuthState>((set) => ({
   user: null,
   hydrated: false,
   hydrate: () => {
-    if (typeof localStorage === "undefined") { set({ hydrated: true }); return; }
-    try {
-      const raw = localStorage.getItem(KEY_SESSION);
-      set({ user: raw ? JSON.parse(raw) : null, hydrated: true });
-    } catch { set({ hydrated: true }); }
+    if (typeof localStorage !== "undefined") localStorage.removeItem(KEY_SESSION);
+    set({ user: null, hydrated: true });
   },
   login: (email, password) => {
     const users = readUsers();
@@ -37,7 +34,6 @@ export const useAuth = create<AuthState>((set) => ({
     if (!rec) return { ok: false, error: "Account not found" };
     if (rec.password !== password) return { ok: false, error: "Incorrect password" };
     const user = { name: rec.name, email: email.toLowerCase() };
-    localStorage.setItem(KEY_SESSION, JSON.stringify(user));
     set({ user });
     return { ok: true };
   },
@@ -50,7 +46,6 @@ export const useAuth = create<AuthState>((set) => ({
     users[key] = { name, password };
     writeUsers(users);
     const user = { name, email: key };
-    localStorage.setItem(KEY_SESSION, JSON.stringify(user));
     set({ user });
     return { ok: true };
   },
