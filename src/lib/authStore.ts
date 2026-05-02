@@ -18,10 +18,13 @@ function toUser(session: { user: { id: string; email?: string | null; user_metad
   return { id: u.id, email: u.email ?? "", name };
 }
 
+let allowAuthSession = false;
+
 export const useAuth = create<AuthState>((set) => {
   // Listen for auth changes (sign in / sign out / token refresh)
   if (typeof window !== "undefined") {
-    supabase.auth.onAuthStateChange((_event, session) => {
+    supabase.auth.onAuthStateChange((event, session) => {
+      if (!allowAuthSession && event !== "SIGNED_OUT") return;
       set({ user: toUser(session), hydrated: true });
     });
   }
@@ -30,8 +33,11 @@ export const useAuth = create<AuthState>((set) => {
     user: null,
     hydrated: false,
     hydrate: async () => {
-      const { data } = await supabase.auth.getSession();
-      set({ user: toUser(data.session), hydrated: true });
+      allowAuthSession = false;
+      if (typeof window !== "undefined") {
+        await supabase.auth.signOut({ scope: "local" }).catch(() => undefined);
+      }
+      set({ user: null, hydrated: true });
     },
     login: async (email, password) => {
       const { data, error } = await supabase.auth.signInWithPassword({
@@ -39,7 +45,8 @@ export const useAuth = create<AuthState>((set) => {
         password,
       });
       if (error) return { ok: false, error: error.message };
-      set({ user: toUser(data.session) });
+      allowAuthSession = true;
+      set({ user: toUser(data.session), hydrated: true });
       return { ok: true };
     },
     signup: async (name, email, password) => {
@@ -55,10 +62,12 @@ export const useAuth = create<AuthState>((set) => {
         },
       });
       if (error) return { ok: false, error: error.message };
-      set({ user: toUser(data.session) });
+      allowAuthSession = true;
+      set({ user: toUser(data.session), hydrated: true });
       return { ok: true };
     },
     logout: async () => {
+      allowAuthSession = false;
       await supabase.auth.signOut();
       set({ user: null });
     },
