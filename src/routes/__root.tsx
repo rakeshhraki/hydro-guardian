@@ -80,7 +80,10 @@ function RootComponent() {
   }, [booting, hydrated, user, path, navigate]);
 
   const isAuthRoute = path === "/auth";
-  const showShell = !booting && (user || isAuthRoute);
+  // Only render the app shell when authenticated, OR when on the public auth route.
+  // While unauthenticated and not yet on /auth, render nothing to prevent dashboard flash.
+  const needsAuthRedirect = hydrated && !user && !isAuthRoute;
+  const showShell = !booting && !needsAuthRedirect && (user || isAuthRoute);
 
   return (
     <div className="min-h-screen flex flex-col relative">
