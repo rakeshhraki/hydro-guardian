@@ -90,11 +90,11 @@ function RootComponent() {
       {user && !isAuthRoute && showShell && <AnimatedBackground />}
       <AnimatePresence>
         {phase === "intro" && <LogoIntro key="intro" />}
-        {phase === "splash" && <SplashScreen key="splash" />}
+        {(phase === "splash" || needsAuthRedirect) && <SplashScreen key="splash" />}
       </AnimatePresence>
       {showShell && !isAuthRoute && <AppHeader />}
       <main className="flex-1">
-        {showShell ? <Outlet /> : !booting && <div className="min-h-screen" />}
+        {showShell ? <Outlet /> : <div className="min-h-screen" />}
       </main>
       {user && <NotificationStack />}
       <Toaster theme="dark" position="top-right" richColors />
