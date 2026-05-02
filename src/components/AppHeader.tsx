@@ -72,7 +72,7 @@ export function AppHeader() {
           </Link>
           {user && (
             <button
-              onClick={() => { logout(); navigate({ to: "/auth", search: { mode: "login" } }); }}
+              onClick={async () => { await logout(); navigate({ to: "/auth", search: { mode: "login" } }); }}
               title={`Sign out (${user.name})`}
               className="h-9 w-9 grid place-items-center rounded-md glass hover:text-[var(--leak)] transition-colors"
             >

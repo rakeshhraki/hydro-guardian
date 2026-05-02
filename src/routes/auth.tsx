@@ -29,10 +29,10 @@ function AuthPage() {
 
   const isSignup = mode === "signup";
 
-  const submit = (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    const result = isSignup ? signup(name, email, password) : login(email, password);
+    const result = isSignup ? await signup(name, email, password) : await login(email, password);
     setLoading(false);
     if (!result.ok) { toast.error(result.error || "Something went wrong"); return; }
     toast.success(isSignup ? "Account created" : "Welcome back");
