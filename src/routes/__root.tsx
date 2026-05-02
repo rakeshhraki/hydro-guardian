@@ -1,4 +1,4 @@
-import { Outlet, createRootRoute, HeadContent, Scripts, useRouterState, useNavigate } from "@tanstack/react-router";
+import { Outlet, createRootRoute, HeadContent, Scripts, useRouterState, useNavigate, redirect } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import appCss from "../styles.css?url";
 import { AppHeader } from "@/components/AppHeader";
@@ -10,6 +10,7 @@ import { useHydroEngine } from "@/lib/useHydroEngine";
 import { useAuth } from "@/lib/authStore";
 import { Toaster } from "@/components/ui/sonner";
 import { AnimatePresence } from "framer-motion";
+import { supabase } from "@/integrations/supabase/client";
 
 function NotFoundComponent() {
   return (
@@ -24,6 +25,13 @@ function NotFoundComponent() {
 }
 
 export const Route = createRootRoute({
+  beforeLoad: async ({ location }) => {
+    if (location.pathname === "/auth") return;
+    const { data, error } = await supabase.auth.getUser();
+    if (error || !data.user) {
+      throw redirect({ to: "/auth", search: { mode: "login" } });
+    }
+  },
   head: () => ({
     meta: [
       { charSet: "utf-8" },
